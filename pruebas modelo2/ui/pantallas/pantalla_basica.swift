@@ -36,6 +36,8 @@ struct PantallaBasica: View {
         
         NavigationLink{
             // que pantalla debe sobreponer
+            RegistroUsuario()
+            
         }
     label:{
             //apariencia del boton

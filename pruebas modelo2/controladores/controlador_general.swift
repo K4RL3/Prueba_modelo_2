@@ -22,6 +22,8 @@ class ControladorGeneral{
     
     func agregarUsuario( _ usuario_nuevo: Usuario) {
         usuarios.append(usuario_nuevo)
+        
+        print("la cantidad actual de usuarios es: \(usuarios.count)")
     }
 }
 
