@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CampoTexto: View {
     @Binding var entrada: String
+    
     var placeholder: String
     var error: ErrorUI?
     var id: String
@@ -16,7 +17,20 @@ struct CampoTexto: View {
     var body: some View {
         TextField(placeholder, text: $entrada)
         if(error?.campo == id){
-            Text(error!.error)
+            switch error!.nivel_error {
+                case .fatal:
+                    Text(error!.error)
+                        .foregroundStyle(Color.red)
+                    
+                case .nhaa:
+                    Text(error!.error)
+                        .foregroundStyle(Color.yellow)
+                    
+                case .ninguno:
+                    Text("")
+            }
+            
         }
     }
 }
+

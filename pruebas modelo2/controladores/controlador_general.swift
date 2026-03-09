@@ -12,7 +12,7 @@ class ControladorGeneral{
     public var usuarios: [Usuario]
     
     init() {
-        mensajes = []
+        mensajes = mensajes_falsos
         usuarios = []
     }
     

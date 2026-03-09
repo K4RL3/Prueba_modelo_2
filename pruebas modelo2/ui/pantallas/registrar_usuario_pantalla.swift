@@ -15,10 +15,13 @@ enum CamoposRegistrarUsuario: String {
 
 struct RegistroUsuario: View {
     @Environment(ControladorGeneral.self) var controlador
+    @Environment(\.dismiss) var salir
+    
     @State var nombre: String = ""
     @State var edad: String = ""
     @State var apodo: String = ""
     @State var instagram: String = ""
+    
     @State var error: ErrorUI? = nil
     
     var body: some View {
@@ -57,12 +60,19 @@ struct RegistroUsuario: View {
             )
 
             
-            Button(action: {validarEntradas()}){
-                VStack{
+            Button(action: { validarEntradas() }) {
+                HStack {
                     Text("Agregar usuario")
-                    Image(systemName: "perosn.fill.badge.plus")
+                        .fontWeight(.semibold)
+                    Image(systemName: "person.fill.badge.plus")
+                        .font(.title2)
                 }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(10)
             }
+            .padding(.top, 20)
         }
         .padding()
     }
@@ -93,7 +103,11 @@ struct RegistroUsuario: View {
         }
         
         controlador.agregarUsuario(crearUsuario())
-        
+        salir() // Salir de la ventana
+        apodo = ""
+        nombre = ""
+        edad = ""
+        instagram = ""
     }
     
     func crearUsuario() -> Usuario {

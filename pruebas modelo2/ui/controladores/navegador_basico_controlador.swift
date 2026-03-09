@@ -8,9 +8,29 @@
 import SwiftUI
 
 struct NavegadorBasico: View {
+    @Environment(ControladorGeneral.self) var control
+    
     var body: some View {
-        NavigationStack {
+        /*NavigationStack {
            PantallaBasica()
+        }*/
+        
+        TabView{
+            Tab("Mensaje",systemImage: "message"){
+                NavigationStack{
+                    PantallaBasica()
+                }
+            }
+            .badge(control.mensajes.count)
+            Tab("Agregar usuario",systemImage: "person.badge.plus"){
+                RegistroUsuario()
+            }
+            Tab("cosas que tengo",systemImage: "shippingbox"){
+                Text("esta es la pantalla de inventario")
+            }
+            Tab("una ultima cosa",systemImage: "ellipsis.circle"){
+                Text("esta es la pantalla de cosas random")
+            }
         }
     }
 }
@@ -18,4 +38,5 @@ struct NavegadorBasico: View {
 
 #Preview {
     NavegadorBasico()
+        .environment(ControladorGeneral())
 }
