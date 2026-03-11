@@ -22,14 +22,21 @@ struct NavegadorBasico: View {
                 }
             }
             .badge(control.mensajes.count)
+            
             Tab("Agregar usuario",systemImage: "person.badge.plus"){
                 RegistroUsuario()
             }
+            
             Tab("cosas que tengo",systemImage: "shippingbox"){
-                Text("esta es la pantalla de inventario")
+                NavigationStack{
+                    InventarioPantalla()
+                }
             }
+            
             Tab("una ultima cosa",systemImage: "ellipsis.circle"){
-                Text("esta es la pantalla de cosas random")
+                NavigationStack{
+                    PantallaCosas()
+                }
             }
         }
     }

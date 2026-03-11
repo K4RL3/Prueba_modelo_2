@@ -10,9 +10,10 @@ struct PantallaBasica: View {
     @Environment(ControladorGeneral.self) var controlador
     
     var body: some View {
-        Text("Hiiiii")
+        Text("Twitter knock off")
             .font(.largeTitle)
             .fontWeight(.bold)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal)
         
         Spacer()
@@ -21,7 +22,7 @@ struct PantallaBasica: View {
             LazyHStack{
                 ForEach(controlador.usuarios){ usuario in
                     NavigationLink{
-                        Text("Esta es la pantalla del \(usuario)")
+                        PerfilPantalla(usuario: usuario)
                     }
                     label:{
                         EtiquetaUsuarioPerfil(usuario: usuario)
@@ -37,7 +38,7 @@ struct PantallaBasica: View {
             LazyVStack{
                 ForEach(controlador.mensajes){mensaje in
                     NavigationLink{
-                        Text("Esta es la pantalla del \(mensaje)")
+                        PantallaMensaje(mensaje: mensaje)
                     }
                     label:{
                         PrevistaMensaje(mensaje: mensaje)

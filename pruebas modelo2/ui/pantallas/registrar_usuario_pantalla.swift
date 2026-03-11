@@ -6,121 +6,116 @@
 //
 import SwiftUI
 
-enum CamoposRegistrarUsuario: String {
-    case nombre = "nombre"
-    case apodo = "apodo"
-    case edad = "edad"
-    case instagram = "instagram"
+enum CamposRegistrarUsuario: String {
+    case nombre, apodo, edad, instagram
 }
 
 struct RegistroUsuario: View {
+    
     @Environment(ControladorGeneral.self) var controlador
     @Environment(\.dismiss) var salir
     
-    @State var nombre: String = ""
-    @State var edad: String = ""
-    @State var apodo: String = ""
-    @State var instagram: String = ""
+    @State private var nombre: String = ""
+    @State private var apodo: String = ""
+    @State private var edad: String = ""
+    @State private var instagram: String = ""
     
-    @State var error: ErrorUI? = nil
+    @State private var error: String? = nil
+    @State private var showingAlert = false
     
     var body: some View {
-        if(error != nil){
-            Text("Hay un porblema resuelve")
-        }
         
-        VStack{
-            //TextField("Nombre ", text: $nombre)
-            CampoTexto(
-                entrada: $nombre,
-                placeholder: "Nombre",
-                error: error,
-                id: CamoposRegistrarUsuario.nombre.rawValue
-            )
-            //TextField("Apodo ", text: $apodo)
-            CampoTexto(
-                entrada: $apodo,
-                placeholder: "Apodo",
-                error: error,
-                id: CamoposRegistrarUsuario.apodo.rawValue
-            )
-            //TextField("Edad ", text: $edad)
-            CampoTexto(
-                entrada: $edad,
-                placeholder: "Edad",
-                error: error,
-                id: CamoposRegistrarUsuario.edad.rawValue
-            )
-            //TextField("Instagram ", text: $instagram)
-            CampoTexto(
-                entrada: $instagram,
-                placeholder: "Instagram",
-                error: error,
-                id: CamoposRegistrarUsuario.instagram.rawValue
-            )
-
-            
-            Button(action: { validarEntradas() }) {
-                HStack {
-                    Text("Agregar usuario")
-                        .fontWeight(.semibold)
-                    Image(systemName: "person.fill.badge.plus")
-                        .font(.title2)
+        ZStack {
+            Color(.systemGray6)
+                .ignoresSafeArea()
+            NavigationStack {
+                VStack(spacing: 20) {
+                    
+                    CampoPersonalizado(entrada: $nombre, placeholder: "Nombre")
+                    CampoPersonalizado(entrada: $apodo, placeholder: "Apodo")
+                    CampoPersonalizado(entrada: $edad, placeholder: "Edad", keyboard: .numberPad)
+                    CampoPersonalizado(entrada: $instagram, placeholder: "Instagram")
+                    
+                    Button {
+                        validarEntradas()
+                    } label: {
+                        HStack {
+                            Image(systemName: "person.fill.badge.plus")
+                            Text("Agregar usuario")
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(14)
+                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 4)
+                    }
+                    .padding(.top, 10)
+                    
+                    Spacer()
                 }
+                .navigationTitle("Registrar Usuario")
                 .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .cornerRadius(10)
             }
-            .padding(.top, 20)
+            
         }
-        .padding()
+        .alert(error ?? "", isPresented: $showingAlert) {
+            Button("OK", role: .cancel) {}
+        }
     }
-    func validarEntradas(){
-        if(nombre.isEmpty){
-            error = ErrorUI(
-                campo: CamoposRegistrarUsuario.nombre.rawValue, error: "no tienes nombre o q", nivel_error: .fatal
-            )
-            return
-        }
-        if(apodo.isEmpty){
-            error = ErrorUI(
-                campo:  CamoposRegistrarUsuario.apodo.rawValue, error: "no me gusta cambialo lol", nivel_error: .fatal
-            )
-            return
-        }
-        if(apodo.isEmpty){
-            error = ErrorUI(
-                campo:  CamoposRegistrarUsuario.edad.rawValue, error: "pos cuantos años tienes tons", nivel_error: .fatal
-            )
-            return
-        }
-        if(apodo.isEmpty){
-            error = ErrorUI(
-                campo:  CamoposRegistrarUsuario.instagram.rawValue, error: "pero agrega tu instagram", nivel_error: .fatal
-            )
-            return
-        }
+    
+    func validarEntradas() {
+        if nombre.isEmpty { mostrarError("Eso que pon un nombre"); return }
+        if apodo.isEmpty { mostrarError("Apoco asi te llaman"); return }
+        if edad.isEmpty || Int(edad) == nil { mostrarError("Apoco no te sabes cuantos años tienes"); return }
+        if instagram.isEmpty { mostrarError("Agrega tu Instagram para stalkearte"); return }
         
         controlador.agregarUsuario(crearUsuario())
-        salir() // Salir de la ventana
-        apodo = ""
-        nombre = ""
-        edad = ""
-        instagram = ""
+        salir()
+        limpiarCampos()
+    }
+    
+    func mostrarError(_ mensaje: String) {
+        error = mensaje
+        showingAlert = true
     }
     
     func crearUsuario() -> Usuario {
         return Usuario(
             nombre: nombre,
-            edad: Int(edad)!,
+            edad: Int(edad) ?? 0,
             apodo: apodo,
             instagram: instagram
         )
     }
+    
+    func limpiarCampos() {
+        nombre = ""
+        apodo = ""
+        edad = ""
+        instagram = ""
+    }
+}
+
+struct CampoPersonalizado: View {
+    @Binding var entrada: String
+    var placeholder: String
+    var keyboard: UIKeyboardType = .default
+    
+    var body: some View {
+        TextField(placeholder, text: $entrada)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(12)
+            .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .keyboardType(keyboard)
+    }
 }
 
 #Preview {
-    RegistroUsuario()
-        .environment(ControladorGeneral())
+    NavigationStack {
+        RegistroUsuario()
+            .environment(ControladorGeneral())
+    }
 }
