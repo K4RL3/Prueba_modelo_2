@@ -10,7 +10,10 @@ struct PantallaBasica: View {
     @Environment(ControladorGeneral.self) var controlador
     
     var body: some View {
-        Text("Esta pantalla me mueve a la siguiente opcion")
+        Text("Hiiiii")
+            .font(.largeTitle)
+            .fontWeight(.bold)
+            .padding(.horizontal)
         
         Spacer()
         
@@ -49,29 +52,34 @@ struct PantallaBasica: View {
         
         Spacer()
         
-        Text("Agregar un hola mundo")
-            .padding()
-            .background(Color.blue.opacity(0.1))
-            .cornerRadius(10)
-            .onTapGesture {
-                controlador.agregarMensaje()
+        HStack(spacing: 12) {
+                        
+                        Button {
+                            controlador.agregarMensaje()
+                        } label: {
+                            Text("Nuevo mensaje")
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                        }
+                        
+                        NavigationLink {
+                            RegistroUsuario()
+                        } label: {
+                            Text("Agregar usuario")
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(12)
+                        }
+                    }
+                    .padding()
+                }
             }
-        
-        
-        NavigationLink{
-            RegistroUsuario()
-            
-        }
-    label:{
-        Text("Agregar usuario")
-               .fontWeight(.semibold)
-               .foregroundColor(.blue)
-       }
-       .padding(.top)
-        
-        Spacer()
-    }
-}
 
 #Preview {
     NavigationStack {

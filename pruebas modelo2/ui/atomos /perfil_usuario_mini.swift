@@ -26,7 +26,7 @@ struct EtiquetaUsuarioPerfil: View {
                     .clipShape(Circle())
                     .overlay(
                         Circle()
-                            .stroke(.white, lineWidth: 3)
+                            .stroke(.white, lineWidth: 1)
                     )
                     .shadow(radius: 5)
                 
@@ -35,14 +35,14 @@ struct EtiquetaUsuarioPerfil: View {
                     .frame(width: 18, height: 18)
                     .overlay(
                         Circle()
-                            .stroke(.white, lineWidth: 2)
+                            .stroke(.white, lineWidth: 1)
                     )
                     .offset(x: 2, y: 2)
             }
             
             Text(usuario.apodo)
                 .font(.headline)
-                .foregroundStyle(.purple)
+                .foregroundStyle(.blue)
             
             Text(usuario.conectado ? "En línea" : "Desconectado")
                 .font(.caption)
